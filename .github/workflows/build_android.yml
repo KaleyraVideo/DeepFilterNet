@@ -38,7 +38,9 @@ jobs:
         working-directory: ./libDF
 
       - name: print folder structure
-        run: find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" 
+        run: |
+            cd libDF
+            find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" 
 
       - uses: actions/upload-artifact@v4
         with:
