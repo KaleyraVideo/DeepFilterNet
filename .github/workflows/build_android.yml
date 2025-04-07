@@ -43,5 +43,5 @@ jobs:
             ./armeabi-v7a/libdf.so
             ./x86/libdf.so
             ./x86_64/libdf.so
-         working-directory: ./libDF/outputs
+          working-directory: ./libDF/outputs
           
