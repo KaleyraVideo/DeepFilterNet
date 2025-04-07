@@ -29,27 +29,19 @@ jobs:
         run: cargo install cargo-ndk
 
       - name: Perform target install
-        run: rustup target add aarch64-linux-android
-        #run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+        run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
       - name: Build android package
-        run: cargo ndk -t arm64-v8a -o outputs build --features android --release
-        #run: cargo ndk -t armeabi-v7a -t arm64-v8a -t x86 -t x86_64 build --features android --release
+        run: cargo ndk -t armeabi-v7a -t arm64-v8a -t x86 -t x86_64 -o outputs build --features android --release
         working-directory: ./libDF
-
-      - name: print folder structure
-        run: |
-            cd libDF
-            find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" 
 
       - uses: actions/upload-artifact@v4
         with:
           name: android_package
-          path: 
-            #| 
-            ./libDF/target/aarch64-linux-android/release/libdf.so
-        #    ./libDF/target/armv7-linux-androideabi/release/libdf.so
-         #   ./libDF/target/i686-linux-android/release/libdf.so
-        #    ./libDF/target/x86_64-linux-android/release/libdf.so
-          retention-days: 7
+          path: | 
+            ./arm64-v8a/libdf.so
+            ./armeabi-v7a/libdf.so
+            ./x86/libdf.so
+            ./x86_64/libdf.so
+         working-directory: ./libDF/outputs
           
