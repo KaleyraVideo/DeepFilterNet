@@ -33,7 +33,7 @@ jobs:
         #run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
 
       - name: Build android package
-        run: cargo ndk -t arm64-v8a build --features android --release
+        run: cargo ndk -t arm64-v8a -o outputs build --features android --release
         #run: cargo ndk -t armeabi-v7a -t arm64-v8a -t x86 -t x86_64 build --features android --release
         working-directory: ./libDF
 
