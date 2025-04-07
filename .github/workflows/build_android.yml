@@ -39,9 +39,8 @@ jobs:
         with:
           name: android_package
           path: | 
-            ./arm64-v8a/libdf.so
-            ./armeabi-v7a/libdf.so
-            ./x86/libdf.so
-            ./x86_64/libdf.so
-          working-directory: ./libDF/outputs
+            ./libDF/outputs/arm64-v8a/libdf.so
+            ./libDF/outputs/armeabi-v7a/libdf.so
+            ./libDF/outputs/x86/libdf.so
+            ./libDF/outputs/x86_64/libdf.so
           
