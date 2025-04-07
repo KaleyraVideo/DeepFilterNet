@@ -1,0 +1,43 @@
+name: Build Android Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    env:
+      RUST_LOG: info
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk
+
+      - name: Build wasm package
+        run: cargo ndk -t armeabi-v7a -t arm64-v8a -t x86 -t x86_64 build --features android --release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android_package
+          path: | 
+            ./libDF/target/aarch64-linux-android/release/libdf.so
+            ./libDF/target/armv7-linux-androideabi/release/libdf.so
+            ./libDF/target/i686-linux-android/release/libdf.so
+            ./libDF/target/x86_64-linux-android/release/libdf.so
+          retention-days: 7
+          
