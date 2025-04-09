@@ -1,0 +1,54 @@
+name: Build and upload Android artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    env:
+      RUST_LOG: info
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+
+      - name: Install Cargo NDK
+        run: cargo install cargo-ndk
+
+      - name: Add Android targets
+        run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
+
+      - name: Build Android libraries
+        run: cargo ndk -t armeabi-v7a -t arm64-v8a -t x86 -t x86_64 -o outputs build --features android --release
+        working-directory: ./libDF
+
+      - name: Upload native Android libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-android-libraries.zip
+          path: | 
+            ./libDF/outputs/arm64-v8a/libdf.so
+            ./libDF/outputs/armeabi-v7a/libdf.so
+            ./libDF/outputs/x86/libdf.so
+            ./libDF/outputs/x86_64/libdf.so
+
+      - name: Upload DeepFilter mobile model
+        uses: actions/upload-artifact@v4
+        with:
+          name: deep-filter-mobile-model.tar.gz
+          path: ./models/DeepFilterNet3_onnx_mobile.tar.gz
+          
