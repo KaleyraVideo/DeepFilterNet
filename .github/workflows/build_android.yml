@@ -29,9 +29,6 @@ jobs:
       - name: Install Cargo NDK
         run: cargo install cargo-ndk
 
-      - name: Add Android targets
-        run: rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
-
       - name: Build Android libraries
         run: cargo ndk -t armeabi-v7a -t arm64-v8a -t x86 -t x86_64 -o outputs build --features android --release
         working-directory: ./libDF
@@ -39,7 +36,7 @@ jobs:
       - name: Upload native Android libraries
         uses: actions/upload-artifact@v4
         with:
-          name: native-android-libraries.zip
+          name: native-android-libraries
           path: | 
             ./libDF/outputs/arm64-v8a/libdf.so
             ./libDF/outputs/armeabi-v7a/libdf.so
